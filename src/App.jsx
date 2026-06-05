@@ -1671,16 +1671,16 @@ export default function App() {
                               <div className="w-full border-t border-dashed border-slate-200"></div>
 
                               {/* Bottom Row: Price & Buttons */}
-                              <div className="flex items-center justify-between gap-3 pt-1">
+                              <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-3 pt-1">
                                 <div className="flex items-baseline gap-0.5">
                                   <span className="text-lg xs:text-xl font-extrabold text-slate-905">Rp {finalPrice}k</span>
                                   <span className="text-[9px] text-slate-400 font-semibold">/pax</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                  <button onClick={() => shareTicket(ticket, isReturn)} className="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 rounded-lg p-2 text-xs font-semibold transition" title={t.share}>
+                                <div className="flex items-center gap-2 w-full xs:w-auto">
+                                  <button onClick={() => shareTicket(ticket, isReturn)} className="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 rounded-xl p-2.5 text-xs font-semibold transition flex-shrink-0" title={t.share}>
                                     <i className="fa-regular fa-paper-plane"></i>
                                   </button>
-                                  <button onClick={() => handleSelectTicket(ticket)} className="bg-primary hover:bg-sky-800 text-white rounded-xl px-4 py-2 font-bold text-xs uppercase tracking-wide transition shadow-md shadow-sky-100/50">
+                                  <button onClick={() => handleSelectTicket(ticket)} className="flex-1 xs:flex-none text-center bg-primary hover:bg-sky-800 text-white rounded-xl px-4 py-2.5 font-bold text-xs uppercase tracking-wide transition shadow-md shadow-sky-100/50">
                                     {isReturn ? t.selectReturn : t.selectTicket}
                                   </button>
                                 </div>
@@ -1859,6 +1859,23 @@ export default function App() {
                       }`}>{type === "Reguler" ? t.vesselTypeRegular : type === "VIP" ? t.vesselTypeVip : t.vesselTypeCarter}</button>
                     );
                   })}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-xs text-slate-400 tracking-wider uppercase mb-3">{t.operator}</h3>
+                <div className="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100/50">
+                  {[...new Set(ticketDatabase.map(t => t.operator))].map(op => (
+                    <label key={op} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        checked={activeOperators.includes(op)} 
+                        onChange={() => handleOperatorToggle(op)} 
+                        className="custom-checkbox" 
+                      />
+                      <span className="text-xs font-bold text-slate-650 group-hover:text-primary transition">{op}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -2136,7 +2153,7 @@ export default function App() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col gap-3">
+                    <div className="hidden lg:flex flex-col gap-3">
                       <button onClick={submitBooking} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-extrabold text-sm uppercase tracking-widest transition shadow-lg shadow-emerald-100">
                         {lang === 'id' ? 'BAYAR SEKARANG' : 'PAY NOW'}
                       </button>
@@ -2148,6 +2165,19 @@ export default function App() {
 
                 </div>
               </div>
+            </div>
+            {/* Sticky Bottom Bar for Mobile Checkout */}
+            <div className="lg:hidden bg-white border-t border-slate-150/60 p-4 flex items-center justify-between gap-4 shadow-[0_-10px_20px_rgba(0,0,0,0.03)] rounded-b-[24px] z-20">
+              <div>
+                <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">{lang === 'id' ? 'TOTAL HARGA' : 'TOTAL PRICE'}</span>
+                <span className="text-emerald-650 text-base xs:text-lg font-black">Rp {getFinalPrice().toLocaleString('id-ID')}</span>
+              </div>
+              <button 
+                onClick={submitBooking} 
+                className="flex-1 max-w-[180px] bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-4 rounded-xl font-extrabold text-xs uppercase tracking-widest transition shadow-md shadow-emerald-100/50 text-center"
+              >
+                {lang === 'id' ? 'BAYAR' : 'PAY'}
+              </button>
             </div>
           </div>
         </div>
@@ -2539,12 +2569,44 @@ function SearchConfigModal({ origin, destination, isRT, adults, kids, dateOut, d
         {/* Passengers quantity */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-1.5">{t.adults}</label>
-            <input type="number" min="1" max="10" value={lclAdults} onChange={(e) => setLclAdults(parseInt(e.target.value) || 1)} className="w-full border border-slate-200 bg-white rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary text-slate-800" />
+            <label className="block text-xs font-bold text-slate-500 mb-2">{t.adults}</label>
+            <div className="flex items-center justify-between border border-slate-200 rounded-xl p-1 bg-white h-10">
+              <button 
+                type="button"
+                onClick={() => setLclAdults(Math.max(1, lclAdults - 1))} 
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary active:bg-slate-50 transition"
+              >
+                <i className="fa-solid fa-minus text-[10px]"></i>
+              </button>
+              <span className="text-xs font-extrabold text-slate-800 w-6 text-center">{lclAdults}</span>
+              <button 
+                type="button"
+                onClick={() => setLclAdults(lclAdults + 1)} 
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary active:bg-slate-50 transition"
+              >
+                <i className="fa-solid fa-plus text-[10px]"></i>
+              </button>
+            </div>
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-500 mb-1.5">{t.kids}</label>
-            <input type="number" min="0" max="10" value={lclKids} onChange={(e) => setLclKids(parseInt(e.target.value) || 0)} className="w-full border border-slate-200 bg-white rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary text-slate-800" />
+            <label className="block text-xs font-bold text-slate-500 mb-2">{t.kids}</label>
+            <div className="flex items-center justify-between border border-slate-200 rounded-xl p-1 bg-white h-10">
+              <button 
+                type="button"
+                onClick={() => setLclKids(Math.max(0, lclKids - 1))} 
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary active:bg-slate-50 transition"
+              >
+                <i className="fa-solid fa-minus text-[10px]"></i>
+              </button>
+              <span className="text-xs font-extrabold text-slate-800 w-6 text-center">{lclKids}</span>
+              <button 
+                type="button"
+                onClick={() => setLclKids(lclKids + 1)} 
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary active:bg-slate-50 transition"
+              >
+                <i className="fa-solid fa-plus text-[10px]"></i>
+              </button>
+            </div>
           </div>
         </div>
 
