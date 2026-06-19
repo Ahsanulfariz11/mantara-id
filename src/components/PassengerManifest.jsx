@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 export default function PassengerManifest({ booking, onClose }) {
   if (!booking) return null;
@@ -80,7 +80,6 @@ export default function PassengerManifest({ booking, onClose }) {
                   <tr className="bg-slate-100 border-y-2 border-slate-300">
                     <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase w-12 text-center">No</th>
                     <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase">Nama Penumpang</th>
-                    <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase">NIK / Paspor</th>
                     <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">L/P</th>
                     <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">Usia</th>
                     <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">Kursi</th>
@@ -91,7 +90,6 @@ export default function PassengerManifest({ booking, onClose }) {
                     <tr key={index} className="hover:bg-slate-50 transition-colors">
                       <td className="py-3 px-4 text-xs font-semibold text-slate-500 text-center">{index + 1}</td>
                       <td className="py-3 px-4 text-xs font-bold text-slate-800">{p.name}</td>
-                      <td className="py-3 px-4 text-xs font-semibold text-slate-600">{p.nik}</td>
                       <td className="py-3 px-4 text-xs font-bold text-slate-800 text-center">{p.gender || '-'}</td>
                       <td className="py-3 px-4 text-xs font-semibold text-slate-600 text-center">{p.age || '-'}</td>
                       <td className="py-3 px-4 text-xs font-extrabold text-sky-600 text-center bg-sky-50/50">{p.seatOutbound}</td>
@@ -134,7 +132,6 @@ export default function PassengerManifest({ booking, onClose }) {
                       <tr className="bg-slate-100 border-y-2 border-slate-300">
                         <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase w-12 text-center">No</th>
                         <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase">Nama Penumpang</th>
-                        <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase">NIK / Paspor</th>
                         <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">L/P</th>
                         <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">Usia</th>
                         <th className="py-3 px-4 text-[10px] font-extrabold text-slate-600 uppercase text-center">Kursi</th>
@@ -145,7 +142,6 @@ export default function PassengerManifest({ booking, onClose }) {
                         <tr key={index} className="hover:bg-slate-50 transition-colors">
                           <td className="py-3 px-4 text-xs font-semibold text-slate-500 text-center">{index + 1}</td>
                           <td className="py-3 px-4 text-xs font-bold text-slate-800">{p.name}</td>
-                          <td className="py-3 px-4 text-xs font-semibold text-slate-600">{p.nik}</td>
                           <td className="py-3 px-4 text-xs font-bold text-slate-800 text-center">{p.gender || '-'}</td>
                           <td className="py-3 px-4 text-xs font-semibold text-slate-600 text-center">{p.age || '-'}</td>
                           <td className="py-3 px-4 text-xs font-extrabold text-orange-600 text-center bg-orange-50/50">{p.seatReturn}</td>

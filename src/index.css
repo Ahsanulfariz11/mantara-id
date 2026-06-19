@@ -5,20 +5,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Scrollbar */
+/* Custom Scrollbar (Hidden visually but still scrollable) */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  display: none;
+  width: 0px;
+  height: 0px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent; 
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; 
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.custom-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Hide scrollbar utility */

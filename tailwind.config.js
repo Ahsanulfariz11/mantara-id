@@ -20,6 +20,9 @@ export default {
         foreground: 'var(--foreground)',
         primary: '#0369a1',
         accent: '#f97316',
+        ocean: '#0F4C81',
+        navy: '#082032',
+        aqua: '#00C2FF',
         slate: {
           250: '#e2e8f0',
           350: '#cbd5e1',
