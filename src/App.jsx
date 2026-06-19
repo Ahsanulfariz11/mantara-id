@@ -2386,8 +2386,8 @@ export default function App() {
                                     value={p.gender || "L"}
                                     onChange={(val) => handlePassengerChange('gender', val)}
                                     options={[
-                                      { value: "L", label: "L" },
-                                      { value: "P", label: "P" }
+                                      { value: "L", label: "Laki-laki" },
+                                      { value: "P", label: "Perempuan" }
                                     ]}
                                   />
                                 </div>
