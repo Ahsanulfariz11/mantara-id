@@ -2735,114 +2735,69 @@ export default function App() {
 
       {/* Success Modal & Boarding Pass */}
       {isSuccessModalOpen && lastBookingResult && (
-        <div className="fixed inset-0 bg-slate-900/60 z-[140] flex justify-center items-center p-4 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-[24px] w-full max-w-md shadow-2xl p-6 text-center animate-scale-up my-8">
-
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-sm ${
-              (lastBookingResult.paymentStatus === 'DIBATALKAN' || lastBookingResult.paymentStatus === 'GAGAL')
-                ? 'bg-rose-100 text-rose-500'
-                : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
-                  ? 'bg-amber-100 text-amber-500 animate-pulse'
-                  : 'bg-emerald-100 text-emerald-500'
-            }`}>
-              <i className={`fa-solid ${
+        <div className="fixed inset-0 bg-slate-900/60 z-[140] flex justify-center items-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-[24px] w-full max-w-md shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-scale-up">
+            
+            {/* Scrollable Content Area */}
+            <div className="p-6 overflow-y-auto text-center flex-1 min-h-0 pb-2">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-sm ${
                 (lastBookingResult.paymentStatus === 'DIBATALKAN' || lastBookingResult.paymentStatus === 'GAGAL')
-                  ? 'fa-xmark'
+                  ? 'bg-rose-100 text-rose-500'
                   : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
-                    ? 'fa-clock'
-                    : 'fa-circle-check'
-              }`}></i>
-            </div>
-
-            <h3 className="font-extrabold text-slate-900 text-lg mb-1">
-              {lastBookingResult.paymentStatus === 'DIBATALKAN'
-                ? (lang === 'id' ? 'Pemesanan Dibatalkan' : 'Booking Cancelled')
-                : lastBookingResult.paymentStatus === 'GAGAL'
-                  ? (lang === 'id' ? 'Pembayaran Gagal' : 'Payment Failed')
-                  : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
-                    ? (lang === 'id' ? 'Menunggu Pembayaran' : 'Pending Payment')
-                    : t.ticketOrdered
-              }
-            </h3>
-            <p className="text-xs text-slate-500 mb-6">
-              {lastBookingResult.paymentStatus === 'DIBATALKAN'
-                ? (lang === 'id' ? 'Pemesanan ini telah dibatalkan.' : 'This booking has been cancelled.')
-                : lastBookingResult.paymentStatus === 'GAGAL'
-                  ? (lang === 'id' ? 'Transaksi pembayaran Anda gagal atau tidak dapat diproses.' : 'Your payment transaction failed or could not be processed.')
-                  : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
-                    ? (lang === 'id' ? 'Selesaikan pembayaran Anda untuk menerbitkan E-Ticket.' : 'Complete your payment to issue your E-Ticket.')
-                    : t.ticketSuccessDesc
-              }
-            </p>
-
-            {/* Countdown Timer */}
-            {lastBookingResult.paymentStatus === 'LUNAS' && (
-              <div className="mb-6 text-left">
-                <CountdownTimer
-                  departureDate={lastBookingResult.outboundDate}
-                  departureTime={lastBookingResult.outboundTicket.departTime}
-                  routeLabel={`${lastBookingResult.origin} ➔ ${lastBookingResult.destination}`}
-                  vesselName={lastBookingResult.outboundTicket.operator}
-                />
+                    ? 'bg-amber-100 text-amber-500 animate-pulse'
+                    : 'bg-emerald-100 text-emerald-500'
+              }`}>
+                <i className={`fa-solid ${
+                  (lastBookingResult.paymentStatus === 'DIBATALKAN' || lastBookingResult.paymentStatus === 'GAGAL')
+                    ? 'fa-xmark'
+                    : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
+                      ? 'fa-clock'
+                      : 'fa-circle-check'
+                }`}></i>
               </div>
-            )}
 
-            {/* Passes Wrapper */}
-            {lastBookingResult.paymentStatus === 'LUNAS' ? (
-              <div className="space-y-6 max-h-[55dvh] overflow-y-auto pr-1 scrollbar-hide py-1">
+              <h3 className="font-extrabold text-slate-900 text-lg mb-1">
+                {lastBookingResult.paymentStatus === 'DIBATALKAN'
+                  ? (lang === 'id' ? 'Pemesanan Dibatalkan' : 'Booking Cancelled')
+                  : lastBookingResult.paymentStatus === 'GAGAL'
+                    ? (lang === 'id' ? 'Pembayaran Gagal' : 'Payment Failed')
+                    : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
+                      ? (lang === 'id' ? 'Menunggu Pembayaran' : 'Pending Payment')
+                      : t.ticketOrdered
+                }
+              </h3>
+              <p className="text-xs text-slate-550 mb-6 font-medium">
+                {lastBookingResult.paymentStatus === 'DIBATALKAN'
+                  ? (lang === 'id' ? 'Pemesanan ini telah dibatalkan.' : 'This booking has been cancelled.')
+                  : lastBookingResult.paymentStatus === 'GAGAL'
+                    ? (lang === 'id' ? 'Transaksi pembayaran Anda gagal atau tidak dapat diproses.' : 'Your payment transaction failed or could not be processed.')
+                    : lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN'
+                      ? (lang === 'id' ? 'Selesaikan pembayaran Anda untuk menerbitkan E-Ticket.' : 'Complete your payment to issue your E-Ticket.')
+                      : t.ticketSuccessDesc
+                }
+              </p>
 
-                {/* Outbound Ticket Boarding Pass */}
-                <div className="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left relative shadow-inner border-t-4 border-t-primary">
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mb-4">
-                    <span>{t.boardingPass} ({t.outboundTicketLabel})</span>
-                    <span className="text-primary font-bold">{lastBookingResult.bookingId}</span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
-                    <div>
-                      <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.buyer}</span>
-                      <span className="text-xs font-bold text-slate-800 truncate block">{lastBookingResult.buyerName}</span>
-                    </div>
-                    <div>
-                      <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.date}</span>
-                      <span className="text-xs font-bold text-slate-800">{lastBookingResult.outboundDate}</span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3 mt-3">
-                    <div>
-                      <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.route}</span>
-                      <span className="text-xs font-bold text-slate-800">{lastBookingResult.origin} ➔ {lastBookingResult.destination}</span>
-                    </div>
-                    <div>
-                      <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.ship}</span>
-                      <span className="text-xs font-bold text-slate-800">{lastBookingResult.outboundTicket.operator}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
-                    <div>
-                      <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.seats}</span>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {lastBookingResult.passengers.map((p, idx) => (
-                          <span key={idx} className="bg-sky-50 border border-sky-100 text-primary text-[10px] font-bold px-2 py-0.5 rounded-lg block">
-                            {p.name.split(' ')[0]}: {p.seatOutbound}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-slate-100">
-                      {generateQRCodeSVG(`${lastBookingResult.bookingId}_OUTBOUND_${lastBookingResult.passengers.map(p => p.seatOutbound).join('_')}`)}
-                    </div>
-                  </div>
+              {/* Countdown Timer */}
+              {lastBookingResult.paymentStatus === 'LUNAS' && (
+                <div className="mb-6 text-left">
+                  <CountdownTimer
+                    departureDate={lastBookingResult.outboundDate}
+                    departureTime={lastBookingResult.outboundTicket.departTime}
+                    routeLabel={`${lastBookingResult.origin} ➔ ${lastBookingResult.destination}`}
+                    vesselName={lastBookingResult.outboundTicket.operator}
+                  />
                 </div>
+              )}
 
-                {/* Return Ticket Boarding Pass */}
-                {lastBookingResult.isRoundTrip && lastBookingResult.returnTicket && (
-                  <div className="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left relative shadow-inner border-t-4 border-t-accent">
+              {/* Passes Wrapper */}
+              {lastBookingResult.paymentStatus === 'LUNAS' ? (
+                <div className="space-y-6 py-1">
+
+                  {/* Outbound Ticket Boarding Pass */}
+                  <div className="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left relative shadow-inner border-t-4 border-t-primary">
                     <div className="flex justify-between items-center text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mb-4">
-                      <span>{t.boardingPass} ({t.returnTicketLabel})</span>
-                      <span className="text-accent font-bold">{lastBookingResult.bookingId}</span>
+                      <span>{t.boardingPass} ({t.outboundTicketLabel})</span>
+                      <span className="text-primary font-bold">{lastBookingResult.bookingId}</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
@@ -2852,18 +2807,18 @@ export default function App() {
                       </div>
                       <div>
                         <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.date}</span>
-                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.returnDate}</span>
+                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.outboundDate}</span>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3 mt-3">
                       <div>
                         <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.route}</span>
-                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.destination} ➔ {lastBookingResult.origin}</span>
+                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.origin} ➔ {lastBookingResult.destination}</span>
                       </div>
                       <div>
                         <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.ship}</span>
-                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.returnTicket.operator}</span>
+                        <span className="text-xs font-bold text-slate-800">{lastBookingResult.outboundTicket.operator}</span>
                       </div>
                     </div>
 
@@ -2872,58 +2827,110 @@ export default function App() {
                         <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.seats}</span>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {lastBookingResult.passengers.map((p, idx) => (
-                            <span key={idx} className="bg-orange-50 border border-orange-100 text-accent text-[10px] font-bold px-2 py-0.5 rounded-lg block">
-                              {p.name.split(' ')[0]}: {p.seatReturn}
+                            <span key={idx} className="bg-sky-50 border border-sky-100 text-primary text-[10px] font-bold px-2 py-0.5 rounded-lg block">
+                              {p.name.split(' ')[0]}: {p.seatOutbound}
                             </span>
                           ))}
                         </div>
                       </div>
                       <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-slate-100">
-                        {generateQRCodeSVG(`${lastBookingResult.bookingId}_RETURN_${lastBookingResult.passengers.map(p => p.seatReturn).join('_')}`)}
+                        {generateQRCodeSVG(`${lastBookingResult.bookingId}_OUTBOUND_${lastBookingResult.passengers.map(p => p.seatOutbound).join('_')}`)}
                       </div>
                     </div>
                   </div>
-                )}
 
-              </div>
-            ) : (
-              <div className="mb-6 p-6 rounded-2xl bg-slate-50 border border-slate-200/60 text-slate-500 text-xs font-medium space-y-3 shadow-inner">
-                <div className="flex justify-center text-4xl mb-1">
-                  <i className={`fa-solid ${
-                    lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN' 
-                      ? 'fa-wallet text-amber-500' 
-                      : 'fa-triangle-exclamation text-rose-500'
-                  }`}></i>
-                </div>
-                <p className="text-slate-600 leading-relaxed font-semibold">
-                  {lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN' ? (
-                    lang === 'id'
-                      ? 'E-Ticket dan Boarding Pass belum diterbitkan karena pembayaran belum selesai. Anda dapat memeriksa status pembayaran di menu "Tiket Saya" setelah menyelesaikan pembayaran.'
-                      : 'E-Ticket and Boarding Pass have not been issued because payment is not completed. You can check the payment status in the "My Bookings" menu after completing your payment.'
-                  ) : (
-                    lang === 'id'
-                      ? 'E-Ticket dan Boarding Pass tidak tersedia karena pemesanan gagal atau telah dibatalkan.'
-                      : 'E-Ticket and Boarding Pass are not available because the booking failed or was cancelled.'
+                  {/* Return Ticket Boarding Pass */}
+                  {lastBookingResult.isRoundTrip && lastBookingResult.returnTicket && (
+                    <div className="bg-white border-2 border-dashed border-slate-200 rounded-2xl p-5 text-left relative shadow-inner border-t-4 border-t-accent">
+                      <div className="flex justify-between items-center text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mb-4">
+                        <span>{t.boardingPass} ({t.returnTicketLabel})</span>
+                        <span className="text-accent font-bold">{lastBookingResult.bookingId}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3">
+                        <div>
+                          <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.buyer}</span>
+                          <span className="text-xs font-bold text-slate-800 truncate block">{lastBookingResult.buyerName}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.date}</span>
+                          <span className="text-xs font-bold text-slate-800">{lastBookingResult.returnDate}</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-3 mt-3">
+                        <div>
+                          <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.route}</span>
+                          <span className="text-xs font-bold text-slate-800">{lastBookingResult.destination} ➔ {lastBookingResult.origin}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.ship}</span>
+                          <span className="text-xs font-bold text-slate-800">{lastBookingResult.returnTicket.operator}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
+                        <div>
+                          <span className="text-[9px] text-slate-400 block font-bold uppercase">{t.seats}</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {lastBookingResult.passengers.map((p, idx) => (
+                              <span key={idx} className="bg-orange-50 border border-orange-100 text-accent text-[10px] font-bold px-2 py-0.5 rounded-lg block">
+                                {p.name.split(' ')[0]}: {p.seatReturn}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow-sm border border-slate-100">
+                          {generateQRCodeSVG(`${lastBookingResult.bookingId}_RETURN_${lastBookingResult.passengers.map(p => p.seatReturn).join('_')}`)}
+                        </div>
+                      </div>
+                    </div>
                   )}
-                </p>
-              </div>
-            )}
 
-            <button
-              onClick={() => {
-                setIsSuccessModalOpen(false);
-                setLastBookingResult(null);
-                setCheckoutActive(false);
-                setSelectedOutboundTicket(null);
-                setSelectedReturnTicket(null);
-                setBookingFlowState('outbound_select');
-                setBuyerName("");
-                setBuyerPhone("");
-              }}
-              className="w-full bg-primary hover:bg-sky-800 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wide transition shadow-md shadow-sky-100 mt-6"
-            >
-              {t.backHome}
-            </button>
+                </div>
+              ) : (
+                <div className="mb-6 p-6 rounded-2xl bg-slate-50 border border-slate-200/60 text-slate-500 text-xs font-medium space-y-3 shadow-inner">
+                  <div className="flex justify-center text-4xl mb-1">
+                    <i className={`fa-solid ${
+                      lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN' 
+                        ? 'fa-wallet text-amber-500' 
+                        : 'fa-triangle-exclamation text-rose-500'
+                    }`}></i>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed font-semibold">
+                    {lastBookingResult.paymentStatus === 'MENUNGGU PEMBAYARAN' ? (
+                      lang === 'id'
+                        ? 'E-Ticket dan Boarding Pass belum diterbitkan karena pembayaran belum selesai. Anda dapat memeriksa status pembayaran di menu "Tiket Saya" setelah menyelesaikan pembayaran.'
+                        : 'E-Ticket and Boarding Pass have not been issued because payment is not completed. You can check the payment status in the "My Bookings" menu after completing your payment.'
+                    ) : (
+                      lang === 'id'
+                        ? 'E-Ticket dan Boarding Pass tidak tersedia karena pemesanan gagal atau telah dibatalkan.'
+                        : 'E-Ticket and Boarding Pass are not available because the booking failed or was cancelled.'
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Sticky Footer */}
+            <div className="p-5 border-t border-slate-100 bg-slate-50">
+              <button
+                onClick={() => {
+                  setIsSuccessModalOpen(false);
+                  setLastBookingResult(null);
+                  setCheckoutActive(false);
+                  setSelectedOutboundTicket(null);
+                  setSelectedReturnTicket(null);
+                  setBookingFlowState('outbound_select');
+                  setBuyerName("");
+                  setBuyerPhone("");
+                }}
+                className="w-full bg-primary hover:bg-sky-850 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wide transition shadow-md shadow-sky-100/60"
+              >
+                {t.backHome}
+              </button>
+            </div>
+
           </div>
         </div>
       )}

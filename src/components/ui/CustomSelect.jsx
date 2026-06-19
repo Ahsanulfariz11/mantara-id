@@ -3,6 +3,14 @@ import { useState } from 'react';
 export default function CustomSelect({ value, onChange, options, icon, disabled, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const selectedOption = (options || []).find(opt => {
+    const optVal = typeof opt === 'object' ? opt.value : opt;
+    return optVal === value;
+  });
+  const displayLabel = selectedOption 
+    ? (typeof selectedOption === 'object' ? selectedOption.label : selectedOption) 
+    : (value || placeholder);
+
   return (
     <div className={`relative ${isOpen ? 'z-[100]' : 'z-10'} w-full`}>
       <button
@@ -11,7 +19,7 @@ export default function CustomSelect({ value, onChange, options, icon, disabled,
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full border border-slate-200 bg-white rounded-xl ${icon ? 'pl-8 xs:pl-10' : 'px-3'} pr-4 py-2.5 xs:py-3 text-xs xs:text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary flex items-center justify-between cursor-pointer transition select-none disabled:bg-slate-50/50 disabled:text-slate-300 disabled:cursor-not-allowed text-left h-10 xs:h-12`}
       >
-        <span className="truncate">{value || placeholder}</span>
+        <span className="truncate">{displayLabel}</span>
         <span className="text-slate-400 text-[10px] xs:text-xs ml-1 flex-shrink-0">
           <i className={`fa-solid ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
         </span>
